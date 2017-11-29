@@ -1,8 +1,7 @@
 package com.wellness.dto;
 
 import java.io.Serializable;
-
-import com.wellness.enums.Field;
+import java.sql.Date;
 
 public class MedicalReports implements Serializable {
 
@@ -10,33 +9,31 @@ public class MedicalReports implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private int userId;
-	private int doctorId;
-	private String description;
-	private Field field;
+	private int procedureId;
+	private Date dateOfReport;
+	private String report;
 
-	public int getUserId() {
-		return userId;
+	public int getProcedureId() {
+		return procedureId;
 	}
 
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setProcedureId(int procedureId) {
+		this.procedureId = procedureId;
 	}
 
-	public String getDescription() {
-		return description;
+	public Date getDateOfReport() {
+		return dateOfReport;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setDateOfReport(Date dateOfReport) {
+		this.dateOfReport = dateOfReport;
 	}
 
-	public Field getField() {
-		return field;
+	public String getReport() {
+		return report;
 	}
 
-	public void setField(Field field) {
-		this.field = field;
+	public void setReport(String report) {
+		this.report = report;
 	}
-
 }

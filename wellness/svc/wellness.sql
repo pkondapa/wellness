@@ -20,6 +20,8 @@ CREATE TABLE User (
     contactId int NOT NULL,
     emergencyContactId int NOT NULL,
     healthId int NOT NULL,
+    userNameStr varchar(50) NOT NULL UNIQUE,
+    passwordStr varchar(50) NOT NULL,
     firstName varchar(200),
     lastName varchar(200),
     gender varchar(50),

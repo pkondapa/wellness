@@ -12,6 +12,14 @@ public class Address implements Serializable {
 	private String zipCode;
 	private String state;
 	private String city;
+	private String building;
+	
+	public String getBuilding() {
+		return building;
+	}
+	public void setBuilding(String building) {
+		this.building = building;
+	}
 	public int getAddressId() {
 		return addressId;
 	}
