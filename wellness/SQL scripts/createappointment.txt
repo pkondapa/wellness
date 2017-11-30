@@ -1,0 +1,12 @@
+DELIMITER //
+CREATE PROCEDURE createappointment 
+	(IN p_userid INT, 
+	 IN p_location varchar(50), 
+	 IN p_date Timestamp)
+BEGIN
+		DECLARE @locid INT;
+		DECLARE @docid INT;
+		SET @locid=(SELECT addressId FROM Address WHERE City=p_location);
+		insert into Appointments (UserId,addressId,dateOfAppointment) values (p_userid, @locid, p_date);
+END //
+DELIMITER ;

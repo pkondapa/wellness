@@ -1,0 +1,9 @@
+DELIMITER //
+CREATE PROCEDURE updateinsurance 
+	(IN p_brand varchar(200), 
+	 IN p_plan varchar(200), 
+	 IN p_expdate DATE)
+BEGIN
+		insert into Insurance (Brand,Plan,termExpiration) values (p_brand,p_plan,p_expdate);
+END //
+DELIMITER ;

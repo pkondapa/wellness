@@ -1,0 +1,86 @@
+DELIMITER //
+CREATE PROCEDURE updateuserinfo 
+	(IN p_firstname varchar(200),
+	 IN p_lname varchar(200),
+	 IN p_gender varchar(50),
+	 IN p_dob DATE, 
+	 IN p_city varchar(100), 
+	 IN p_state varchar(2),
+	 IN p_zip INT,
+	 IN p_emergency VARCHAR(50),
+	 IN p_cell VARCHAR(50),
+	 IN p_height INT,
+	 IN p_weight INT,
+	 IN p_userid INT)
+BEGIN
+	DECLARE v_addrid INT;
+	DECLARE exit handler for sqlexception
+
+	BEGIN
+		-- ERROR
+		ROLLBACK;
+	END;
+		IF EXISTS (SELECT * FROM `User` WHERE userId=p_userid) THEN
+		BEGIN
+			START TRANSACTION;
+				IF p_firstname IS NOT NULL THEN
+					UPDATE `User` SET firstName=p_firstname WHERE userId=p_userid;
+				END IF;
+				IF p_lname IS NOT NULL THEN
+					UPDATE `User` SET lastName=p_lname WHERE userId=p_userid;
+				END IF;
+				IF p_gender IS NOT NULL THEN
+					UPDATE `User` SET gender=p_gender WHERE userId=p_userid;
+				END IF;
+				IF p_dob IS NOT NULL THEN
+					UPDATE `User` SET dateOfBirth=p_dob WHERE userId=p_userid;
+				END IF;
+				IF p_city IS NOT NULL THEN
+					BEGIN
+						INSERT INTO Address(zipCode,stateAbbr,City,Building) VALUES (p_zip,p_state,p_city,'Home');
+						SELECT LAST_INSERT_ID() INTO v_addrid;
+						UPDATE `User` SET addressId=v_addrid;
+					END;					
+				END IF;
+				IF p_cell IS NOT NULL THEN
+					BEGIN
+						INSERT INTO Contact(phoneNumber,typeOfContact) VALUES (p_cell,'Cell');
+						UPDATE `User` SET contactId=(SELECT LAST_INSERT_ID());
+					END;
+				END IF;
+				IF p_emergency IS NOT NULL THEN
+					BEGIN
+						INSERT INTO Contact(phoneNumber,typeOfContact) VALUES (p_emergency,'Emergency');
+						UPDATE `User` SET emergencyContactId=(SELECT LAST_INSERT_ID());
+					END;
+				END IF;
+				IF p_height IS NOT NULL THEN
+					BEGIN
+						IF EXISTS (SELECT * FROM Health WHERE userId=p_userid) THEN
+							UPDATE Health SET heightInches=p_height WHERE userId=p_userid;
+						ELSE
+							BEGIN
+								INSERT INTO Health(userId,heightInches) VALUES(p_userid,p_height);
+								UPDATE `User` SET healthId=(SELECT LAST_INSERT_ID());
+							END;
+						END IF;
+					END;
+				END IF;	
+				IF p_weight IS NOT NULL THEN
+					BEGIN
+						IF EXISTS (SELECT * FROM Health WHERE userId=p_userid) THEN
+							UPDATE Health SET weightInPounds=p_weight WHERE userId=p_userid;
+						ELSE
+							BEGIN
+								INSERT INTO Health(userId,weightInPounds) VALUES(p_userid,p_weight);
+								UPDATE `User` SET healthId=(SELECT LAST_INSERT_ID());
+							END;
+						END IF;
+					END;
+				END IF;
+				UPDATE Health SET bodyMassIndex=(weightInPounds*0.45/(heightInches*heightInches*0.025*0.025)) WHERE userId=p_userid;
+			COMMIT;
+		END;
+	END IF;
+END //
+DELIMITER ;

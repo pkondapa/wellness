@@ -1,0 +1,11 @@
+DELIMITER //
+CREATE PROCEDURE registeruser(
+	IN p_userNameStr VARCHAR(50),
+	IN p_passwordStr VARCHAR(50),
+	IN p_fname VARCHAR(200),
+	IN p_lname VARCHAR(200)
+	)
+BEGIN
+	INSERT INTO User(userNameStr,passwordStr,firstName,lastName) VALUES(p_userNameStr,p_passwordStr,p_fname,p_lname);
+END //
+DELIMITER ;
