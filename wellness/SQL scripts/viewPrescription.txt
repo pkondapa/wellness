@@ -1,0 +1,7 @@
+DELIMITER $$
+CREATE PROCEDURE `viewPrescription_procedure`(In user_Id int)
+BEGIN
+set @userId=(select userId from user where userId=user_Id);
+select * from Prescription where userId=@userId;
+END$$
+DELIMITER ;
