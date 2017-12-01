@@ -3,7 +3,7 @@ CREATE PROCEDURE `viewMedicalReport_procedure`(In user_Id int)
 BEGIN
 
 set @userId=(select userId from user where userId=user_Id);
-select * from MedicalReport where userId=@userId;
+select * from MedicalReport where ProcedureId IN (SELECT ProcedureId FROM Procedures WHERE AppointmentId IN (SELECT AppointmentId from Appointment WHERE UserId=user_Id));
 
 END$$
 DELIMITER ;
